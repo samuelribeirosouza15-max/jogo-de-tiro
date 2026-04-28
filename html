@@ -1,27 +1,36 @@
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Zombie Survival CSS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zombie Shooter CSS</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div class="cenario">
-        <h1>SURVIVE THE NIGHT</h1>
-        <p>Clique nos zumbis para eliminá-los!</p>
+    <div class="game-container">
+        <div class="ui">
+            <h1>ZOMBIE ATTACK</h1>
+            <p>Elimine todos os zumbis para sobreviver!</p>
+        </div>
 
-        <input type="checkbox" id="zumbi1">
-        <label for="zumbi1" class="zumbi z1">🧟</label>
+        <input type="checkbox" id="z1">
+        <label for="z1" class="zumbi zumbi-1">🧟</label>
 
-        <input type="checkbox" id="zumbi2">
-        <label for="zumbi2" class="zumbi z2">🧟</label>
+        <input type="checkbox" id="z2">
+        <label for="z2" class="zumbi zumbi-2">🧟</label>
 
-        <input type="checkbox" id="zumbi3">
-        <label for="zumbi3" class="zumbi z3">🧟</label>
+        <input type="checkbox" id="z3">
+        <label for="z3" class="zumbi zumbi-3">🧟</label>
 
-        <div class="vitoria">VOCÊ SOBREVIVEU!</div>
+        <input type="checkbox" id="z4">
+        <label for="z4" class="zumbi zumbi-4">🧟</label>
+
+        <div class="vitoria">
+            <h2>MISSÃO CUMPRIDA!</h2>
+            <p>Você sobreviveu à horda.</p>
+            <button onclick="location.reload()">Jogar Novamente</button>
+        </div>
     </div>
 
 </body>
