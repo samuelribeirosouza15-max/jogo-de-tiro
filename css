@@ -1,1 +1,69 @@
+body {
+    margin: 0;
+    background-color: #1a1a1a;
+    color: white;
+    font-family: 'Courier New', Courier, monospace;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
 
+.cenario {
+    position: relative;
+    width: 600px;
+    height: 400px;
+    background: #2d4a22; /* Cor de grama escura */
+    border: 10px solid #333;
+    overflow: hidden;
+    cursor: crosshair;
+}
+
+/* Esconde os checkboxes reais */
+input[type="checkbox"] {
+    display: none;
+}
+
+/* Estilo base do Zumbi */
+.zumbi {
+    position: absolute;
+    font-size: 50px;
+    bottom: -60px;
+    cursor: pointer;
+    transition: transform 0.2s;
+    user-select: none;
+}
+
+/* Animação de subida e descida */
+@keyframes subir {
+    0%, 100% { bottom: -60px; }
+    50% { bottom: 50px; }
+}
+
+/* Configuração individual de cada zumbi */
+.z1 { left: 10%; animation: subir 3s infinite; }
+.z2 { left: 45%; animation: subir 4s infinite 1s; }
+.z3 { left: 80%; animation: subir 2.5s infinite 0.5s; }
+
+/* O Truque: Quando clicado (checked), o zumbi some */
+input:checked + .zumbi {
+    display: none;
+}
+
+/* Mensagem de vitória (opcional) */
+.vitoria {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 30px;
+    color: #ff0000;
+    text-align: center;
+}
+
+/* Se todos os zumbis forem clicados, mostra a vitória */
+#zumbi1:checked ~ #zumbi2:checked ~ #zumbi3:checked ~ .vitoria {
+    display: block;
+}
