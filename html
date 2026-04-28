@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zombie Shooter CSS - Versão Única</title>
+    <title>Mata Zumbi</title>
     <style>
-        /* --- ESTILOS CSS --- */
+        /* Configurações Gerais */
         body {
             margin: 0;
             padding: 0;
@@ -28,46 +28,39 @@
             cursor: crosshair;
         }
 
-        .ui {
-            text-align: center;
-            pointer-events: none;
-            position: relative;
-            z-index: 10;
-        }
-
-        /* Esconde os Checkboxes reais */
-        input[type="checkbox"] {
-            position: absolute;
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        /* Estilo do Zumbi */
+        /* Estilo do Zumbi - Usando width/height para criar uma área de clique boa */
         .zumbi {
             position: absolute;
             font-size: 60px;
             cursor: pointer;
             user-select: none;
-            bottom: -100px;
-            transition: transform 0.1s;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* Melhoria: Usar translateY em vez de bottom deixa a animação mais fluida e o clique mais preciso */
+            transform: translateY(100vh); 
+            transition: opacity 0.2s;
         }
 
-        /* Animação de Movimento */
+        /* Animações de Movimento */
         @keyframes subir-zumbi {
-            0% { bottom: -100px; transform: scale(1); }
-            50% { bottom: 60%; transform: scale(1.2); }
-            100% { bottom: -100px; transform: scale(1); }
+            0% { transform: translateY(100vh) scale(1); }
+            50% { transform: translateY(40vh) scale(1.2); }
+            100% { transform: translateY(100vh) scale(1); }
         }
 
-        /* Posicionamento e tempo de cada zumbi */
         .zumbi-1 { left: 15%; animation: subir-zumbi 4s infinite; }
         .zumbi-2 { left: 40%; animation: subir-zumbi 5s infinite 1.5s; }
         .zumbi-3 { left: 65%; animation: subir-zumbi 3s infinite 0.5s; }
         .zumbi-4 { left: 85%; animation: subir-zumbi 6s infinite 2s; }
 
-        /* O "Tiro": Quando clicado (checked), o zumbi some */
-        input:checked + .zumbi {
-            display: none;
+        /* Classe adicionada pelo JavaScript ao matar */
+        .morto {
+            opacity: 0;
+            pointer-events: none; /* Impede clicar de novo no mesmo zumbi */
+            animation: none !important;
         }
 
         /* Tela de Vitória */
@@ -77,29 +70,29 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.95);
+            background: rgba(0, 0, 0, 0.9);
             padding: 40px;
             border: 3px solid #00ff00;
             text-align: center;
             z-index: 100;
-            box-shadow: 0 0 20px #00ff00;
         }
 
-        .vitoria h2 { color: #00ff00; margin-top: 0; }
-
-        /* Lógica de Vitória: Se TODOS os zumbis forem clicados */
-        #z1:checked ~ #z2:checked ~ #z3:checked ~ #z4:checked ~ .vitoria {
-            display: block;
+        .vitoria.show {
+            display: block; /* O JS adiciona essa classe */
         }
+
+        .vitoria h2 { color: #00ff00; margin-top: 0;}
 
         button {
             background: #00ff00;
+            color: #000;
             border: none;
             padding: 10px 20px;
             cursor: pointer;
             font-weight: bold;
-            font-family: inherit;
-            text-transform: uppercase;
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+            margin-top: 10px;
         }
 
         button:hover {
@@ -110,29 +103,45 @@
 <body>
 
     <div class="game-container">
-        <div class="ui">
-            <h1>ZOMBIE ATTACK</h1>
-            <p>Clique nos zumbis para eliminá-los!</p>
-        </div>
+        <!-- Agora são apenas divs simples, sem gambiarras de checkbox -->
+        <div class="zumbi zumbi-1" onclick="matarZumbi(this)">🧟</div>
+        <div class="zumbi zumbi-2" onclick="matarZumbi(this)">🧟</div>
+        <div class="zumbi zumbi-3" onclick="matarZumbi(this)">🧟</div>
+        <div class="zumbi zumbi-4" onclick="matarZumbi(this)">🧟</div>
 
-        <input type="checkbox" id="z1">
-        <label for="z1" class="zumbi zumbi-1">🧟</label>
-
-        <input type="checkbox" id="z2">
-        <label for="z2" class="zumbi zumbi-2">🧟</label>
-
-        <input type="checkbox" id="z3">
-        <label for="z3" class="zumbi zumbi-3">🧟</label>
-
-        <input type="checkbox" id="z4">
-        <label for="z4" class="zumbi zumbi-4">🧟</label>
-
-        <div class="vitoria">
-            <h2>MISSÃO CUMPRIDA!</h2>
-            <p>A horda foi derrotada.</p>
-            <button onclick="location.reload()">Jogar Novamente</button>
+        <div class="vitoria" id="telaVitoria">
+            <h2>VOCÊ SOBREVIVEU!</h2>
+            <p>Todos os zumbis foram eliminados.</p>
+            <button onclick="reiniciarJogo()">Jogar Novamente</button>
         </div>
     </div>
+
+    <script>
+        let zumbisMortos = 0;
+        const totalZumbis = 4;
+
+        function matarZumbi(elemento) {
+            // Evita que conte o mesmo zumbi duas vezes se o jogador clicar muito rápido
+            if(elemento.classList.contains('morto')) return;
+
+            elemento.classList.add('morto'); // Faz o zumbi sumir
+            zumbisMortos++;
+
+            // Verifica se matou todos
+            if (zumbisMortos === totalZumbis) {
+                document.getElementById('telaVitoria').classList.add('show');
+            }
+        }
+
+        function reiniciarJogo() {
+            zumbisMortos = 0; // Zera o contador
+            document.getElementById('telaVitoria').classList.remove('show'); // Esconde a tela
+            
+            // Remove a classe 'morto' de todos os zumbis, fazendo eles reaparecerem
+            const zumbis = document.querySelectorAll('.zumbi');
+            zumbis.forEach(zumbi => zumbi.classList.remove('morto'));
+        }
+    </script>
 
 </body>
 </html>
