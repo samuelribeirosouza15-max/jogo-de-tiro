@@ -3,15 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zombie Shooter CSS</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Zombie Shooter CSS - Versão Única</title>
+    <style>
+        /* --- ESTILOS CSS --- */
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #0f0f0f;
+            color: #eee;
+            font-family: 'Courier New', monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .game-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(to bottom, #1a1a2e, #16213e);
+            border: 5px solid #333;
+            cursor: crosshair;
+        }
+
+        .ui {
+            text-align: center;
+            pointer-events: none;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Esconde os Checkboxes reais */
+        input[type="checkbox"] {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Estilo do Zumbi */
+        .zumbi {
+            position: absolute;
+            font-size: 60px;
+            cursor: pointer;
+            user-select: none;
+            bottom: -100px;
+            transition: transform 0.1s;
+        }
+
+        /* Animação de Movimento */
+        @keyframes subir-zumbi {
+            0% { bottom: -100px; transform: scale(1); }
+            50% { bottom: 60%; transform: scale(1.2); }
+            100% { bottom: -100px; transform: scale(1); }
+        }
+
+        /* Posicionamento e tempo de cada zumbi */
+        .zumbi-1 { left: 15%; animation: subir-zumbi 4s infinite; }
+        .zumbi-2 { left: 40%; animation: subir-zumbi 5s infinite 1.5s; }
+        .zumbi-3 { left: 65%; animation: subir-zumbi 3s infinite 0.5s; }
+        .zumbi-4 { left: 85%; animation: subir-zumbi 6s infinite 2s; }
+
+        /* O "Tiro": Quando clicado (checked), o zumbi some */
+        input:checked + .zumbi {
+            display: none;
+        }
+
+        /* Tela de Vitória */
+        .vitoria {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.95);
+            padding: 40px;
+            border: 3px solid #00ff00;
+            text-align: center;
+            z-index: 100;
+            box-shadow: 0 0 20px #00ff00;
+        }
+
+        .vitoria h2 { color: #00ff00; margin-top: 0; }
+
+        /* Lógica de Vitória: Se TODOS os zumbis forem clicados */
+        #z1:checked ~ #z2:checked ~ #z3:checked ~ #z4:checked ~ .vitoria {
+            display: block;
+        }
+
+        button {
+            background: #00ff00;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: bold;
+            font-family: inherit;
+            text-transform: uppercase;
+        }
+
+        button:hover {
+            background: #00cc00;
+        }
+    </style>
 </head>
 <body>
 
     <div class="game-container">
         <div class="ui">
             <h1>ZOMBIE ATTACK</h1>
-            <p>Elimine todos os zumbis para sobreviver!</p>
+            <p>Clique nos zumbis para eliminá-los!</p>
         </div>
 
         <input type="checkbox" id="z1">
@@ -28,7 +129,7 @@
 
         <div class="vitoria">
             <h2>MISSÃO CUMPRIDA!</h2>
-            <p>Você sobreviveu à horda.</p>
+            <p>A horda foi derrotada.</p>
             <button onclick="location.reload()">Jogar Novamente</button>
         </div>
     </div>
