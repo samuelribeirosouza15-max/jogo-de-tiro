@@ -1,69 +1,91 @@
+/* Configurações Gerais */
 body {
     margin: 0;
-    background-color: #1a1a1a;
-    color: white;
-    font-family: 'Courier New', Courier, monospace;
-    overflow: hidden;
+    padding: 0;
+    background-color: #0f0f0f;
+    color: #eee;
+    font-family: 'Courier New', monospace;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
+    overflow: hidden;
 }
 
-.cenario {
+.game-container {
     position: relative;
-    width: 600px;
-    height: 400px;
-    background: #2d4a22; /* Cor de grama escura */
-    border: 10px solid #333;
-    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(to bottom, #1a1a2e, #16213e);
+    border: 5px solid #333;
     cursor: crosshair;
 }
 
-/* Esconde os checkboxes reais */
-input[type="checkbox"] {
-    display: none;
+.ui {
+    text-align: center;
+    pointer-events: none; /* Garante que o texto não atrapalhe o clique */
 }
 
-/* Estilo base do Zumbi */
+/* Esconde os Checkboxes */
+input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Estilo do Zumbi */
 .zumbi {
     position: absolute;
-    font-size: 50px;
-    bottom: -60px;
+    font-size: 60px;
     cursor: pointer;
-    transition: transform 0.2s;
     user-select: none;
+    bottom: -100px;
+    transition: transform 0.1s;
 }
 
-/* Animação de subida e descida */
-@keyframes subir {
-    0%, 100% { bottom: -60px; }
-    50% { bottom: 50px; }
+/* Animações de Movimento */
+@keyframes subir-zumbi {
+    0% { bottom: -100px; transform: scale(1); }
+    50% { bottom: 60%; transform: scale(1.2); }
+    100% { bottom: -100px; transform: scale(1); }
 }
 
-/* Configuração individual de cada zumbi */
-.z1 { left: 10%; animation: subir 3s infinite; }
-.z2 { left: 45%; animation: subir 4s infinite 1s; }
-.z3 { left: 80%; animation: subir 2.5s infinite 0.5s; }
+.zumbi-1 { left: 15%; animation: subir-zumbi 4s infinite; }
+.zumbi-2 { left: 40%; animation: subir-zumbi 5s infinite 1.5s; }
+.zumbi-3 { left: 65%; animation: subir-zumbi 3s infinite 0.5s; }
+.zumbi-4 { left: 85%; animation: subir-zumbi 6s infinite 2s; }
 
-/* O Truque: Quando clicado (checked), o zumbi some */
+/* Feedback ao clicar (morte do zumbi) */
 input:checked + .zumbi {
     display: none;
 }
 
-/* Mensagem de vitória (opcional) */
+/* Tela de Vitória */
 .vitoria {
     display: none;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 30px;
-    color: #ff0000;
+    background: rgba(0, 0, 0, 0.9);
+    padding: 40px;
+    border: 3px solid #00ff00;
     text-align: center;
+    z-index: 100;
 }
 
-/* Se todos os zumbis forem clicados, mostra a vitória */
-#zumbi1:checked ~ #zumbi2:checked ~ #zumbi3:checked ~ .vitoria {
+.vitoria h2 { color: #00ff00; }
+
+/* Lógica Final: Se TODOS os zumbis estiverem marcados, mostra vitória */
+#z1:checked ~ #z2:checked ~ #z3:checked ~ #z4:checked ~ .vitoria {
     display: block;
+}
+
+button {
+    background: #00ff00;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 10px;
 }
